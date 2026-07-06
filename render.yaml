@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: city-baron
+    runtime: node
+    repo: https://github.com/swobby2/city-baron
+    branch: main
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci && cd packages/server && npx prisma generate && cd ../client && npx vite build
+    startCommand: node packages/server/dist/main.js
+    healthCheckPath: /api/lobby
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: city-baron-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+
+databases:
+  - name: city-baron-db
+    region: frankfurt
+    plan: free
