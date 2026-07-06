@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id          String   @id @default(uuid())
+  state       String   @default("RUNNING")
+  turn        Int      @default(0)
+  marketPhase String   @default("NORMAL")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  districts  District[]
+  players    Player[]
+  events     GameEvent[]
+  marketData MarketData[]
+  properties Property[]
+  loans      Loan[]
+  actionLogs ActionLog[]
+}
+
+model Player {
+  id        String  @id @default(uuid())
+  gameId    String
+  name      String
+  type      String  @default("HUMAN")
+  personality String?
+
+  capital     Float   @default(100000)
+  influence   Int     @default(10)
+  image       Int     @default(50)
+  creditLimit Float   @default(50000)
+  totalLoan   Float   @default(0)
+  marketShare Float   @default(0)
+  cashflow    Float   @default(0)
+  isBankrupt  Boolean @default(false)
+  bankruptcyProtection Int @default(2)
+
+  game       Game       @relation(fields: [gameId], references: [id])
+  properties Property[]
+  loans      Loan[]
+
+  @@unique([gameId, name])
+}
+
+model District {
+  id            String  @id @default(uuid())
+  gameId        String
+  name          String
+  districtIndex Int
+  demand        Int     @default(50)
+  prestige      Int     @default(50)
+  crime         Int     @default(30)
+  traffic       Int     @default(50)
+  growth        Int     @default(0)
+  rentLevel     Int     @default(5)
+  baseLandPrice Float   @default(10000)
+  maxPlots      Int     @default(15)
+
+  game       Game       @relation(fields: [gameId], references: [id])
+  properties Property[]
+
+  @@unique([gameId, name])
+  @@unique([gameId, districtIndex])
+}
+
+model Property {
+  id          String  @id @default(uuid())
+  gameId      String
+  districtId  String
+  playerId    String?
+  type        String
+  plotIndex   Int
+
+  purchasePrice  Float @default(0)
+  marketValue    Float @default(0)
+  maintenance    Float @default(0)
+  rent           Float @default(0)
+  occupancy      Int   @default(100)
+  condition      Int   @default(100)
+  prestige       Int   @default(50)
+  upgradeLevel   Int   @default(0)
+
+  ownedSince  Int     @default(0)
+  isMortgaged Boolean @default(false)
+  forSale     Boolean @default(false)
+  salePrice   Float?
+
+  player   Player?  @relation(fields: [playerId], references: [id])
+  district District @relation(fields: [districtId], references: [id])
+  game     Game     @relation(fields: [gameId], references: [id])
+
+  @@unique([districtId, plotIndex])
+}
+
+model Loan {
+  id           String  @id @default(uuid())
+  playerId     String
+  gameId       String
+  amount       Float
+  interestRate Float
+  remaining    Float
+  takenAt      Int
+  duration     Int     @default(20)
+
+  player Player @relation(fields: [playerId], references: [id])
+  game   Game   @relation(fields: [gameId], references: [id])
+}
+
+model GameEvent {
+  id        String   @id @default(uuid())
+  gameId    String
+  name      String
+  type      String
+  targetDistrictId String?
+  playerTargetId   String?
+  duration  Int      @default(1)
+  remaining Int      @default(1)
+  params    String   @default("{}")
+  createdAt DateTime @default(now())
+
+  game Game @relation(fields: [gameId], references: [id])
+}
+
+model MarketData {
+  id              String  @id @default(uuid())
+  gameId          String
+  turn            Int
+  avgPrice        Float
+  avgDemand       Float
+  totalProperties Int
+  soldProperties  Int
+
+  game Game @relation(fields: [gameId], references: [id])
+}
+
+model ActionLog {
+  id        String   @id @default(uuid())
+  gameId    String
+  playerId  String?
+  turn      Int
+  action    String
+  details   String   @default("{}")
+  createdAt DateTime @default(now())
+
+  game Game @relation(fields: [gameId], references: [id])
+}

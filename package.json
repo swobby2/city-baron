@@ -1,0 +1,19 @@
+{
+  "name": "city-baron",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm -w packages/server run dev",
+    "dev:client": "npm -w packages/client run dev",
+    "build": "npm -w packages/server build && npm -w packages/client build",
+    "db:migrate": "npm -w packages/server run db:migrate",
+    "db:seed": "npm -w packages/server run db:seed"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.4.0"
+  }
+}
