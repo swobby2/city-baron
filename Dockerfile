@@ -6,19 +6,23 @@ WORKDIR /app
 # Install build dependencies
 RUN apk add --no-cache python3 make g++ openssl
 
-# Copy package files
+# Copy package files + Prisma schema (needed for postinstall)
 COPY package.json package-lock.json ./
 COPY packages/server/package.json ./packages/server/
 COPY packages/client/package.json ./packages/client/
+COPY packages/server/prisma ./packages/server/prisma/
 
 # Install dependencies
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 # Copy source
 COPY . .
 
 # Generate Prisma client
 RUN cd packages/server && npx prisma generate
+
+# Build TypeScript
+RUN cd packages/server && npx tsc
 
 # Build client
 RUN cd packages/client && npx vite build
