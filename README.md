@@ -1,50 +1,95 @@
-# City Baron — Immobilien-Tycoon Browsergame
+# City Baron 🏙️
 
-Ein OpenFront-inspiriertes Immobilien-Strategiespiel für den Browser.
+**Ein OpenFront-inspiriertes Immobilien-Strategiespiel für den Browser.**
 
-## Quick Start (Lokal)
+Baue einen Immobilienkonzern auf, kaufe Grundstücke, saniere und modernisiere Gebäude, kämpfe gegen KI-Konkurrenten und werde zum Marktführer!
+
+👉 **[Jetzt online spielen!](https://city-baron.onrender.com)** (wenn deployed)
+
+---
+
+## Features
+
+- 🗺️ **Dynamische Stadtkarte** mit 10+ Bezirken und Heatmaps
+- 🏪 **Marktsystem** mit Angebot/Nachfrage und Preisschwankungen
+- 🏦 **Bank- und Kreditsystem** mit Bonitätsbewertung
+- 🤖 **6 Bot-Persönlichkeiten** mit eigener KI
+- 📊 **Wirtschafts-Simulation** mit Marktzyklen, Events und Synergien
+- 🎮 **Lobby-System** mit mehreren Spielräumen
+- 🔧 **Sanieren, Modernisieren, Handeln** — viele Strategien
+
+---
+
+## Für Entwickler
+
+### Schnellstart lokal
 
 ```bash
+# Repository klonen
+git clone https://github.com/swobby2/city-baron.git
+cd city-baron
+
+# Abhängigkeiten installieren
 npm install
-cd packages/server && npx prisma generate && npx prisma migrate dev --name init
+
+# Prisma Client generieren
+cd packages/server
+npx prisma generate
+npx prisma migrate dev --name init
 cd ../..
+
+# Entwicklung starten (Server + Client gleichzeitig)
 npm run dev
 ```
 
-- Frontend: http://localhost:5173
-- Backend: http://localhost:3001
+- **Frontend:** http://localhost:5173
+- **Backend:** http://localhost:3001
 
-## Deployment
+### Tech Stack
 
-### Auf Zeabur (empfohlen — einfach & kostenlos)
+| Komponente | Technologie |
+|------------|-------------|
+| Frontend | React 18 + TypeScript + Vite |
+| Backend | Node.js + Express + Socket.io |
+| Datenbank | PostgreSQL (Prisma ORM) |
+| Echtzeit | WebSocket (Socket.io) |
 
-1. Forke dieses Repo auf GitHub
-2. Gehe zu [zeabur.com](https://zeabur.com) → New Project → Connect GitHub Repo
-3. Wähle `city-baron` → Zeabur erkennt automatisch Node.js
-4. Füge PostgreSQL hinzu (Zeabur Dashboard → Add Database → PostgreSQL)
-5. Setze Environment Variable: `DATABASE_URL` = PostgreSQL Connection String von Zeabur
-6. Setze `NODE_ENV=production`, `PORT=3001`
-7. Deploy — fertig!
+---
 
-### Auf Fly.io
+## Mitwirken (Contributing)
 
-```bash
-fly launch
-fly scale vm shared-cpu-1x@256mb  # Free tier
-fly secrets set DATABASE_URL="<postgres-url>"
-fly deploy
-```
+Jeder kann mitmachen! So geht's:
 
-### Auf Railway
+1. **Fork** das Repository (oben rechts auf GitHub)
+2. **Clone** deinen Fork: `git clone https://github.com/DEIN-USERNAME/city-baron.git`
+3. **Branch** erstellen: `git checkout -b feature/meine-idee`
+4. **Änderungen** machen und committen
+5. **Push** zu deinem Fork: `git push origin feature/meine-idee`
+6. **Pull Request** auf GitHub erstellen
 
-1. Verbinde GitHub Repo mit Railway
-2. Füge PostgreSQL Plugin hinzu
-3. Setze `DATABASE_URL` Environment Variable
-4. Deploy
+### Was kannst du beitragen?
 
-## Technik
+- 🐛 **Bugs melden** → [Issues](https://github.com/swobby2/city-baron/issues)
+- 💡 **Feature-Ideen** → Diskussion in Issues
+- 🎨 **UI/UX Verbesserungen** → CSS, Animationen, Layout
+- 🧠 **Bot-KI** → Klügere Gegner
+- ⚖️ **Balancing** → Wirtschaftssystem optimieren
+- 🌍 **Multiplayer** → Echtzeit-Mehrspieler-Modus
+- 📖 **Dokumentation** → Bessere README, Wiki
 
-- **Frontend:** React + TypeScript + Vite
-- **Backend:** Node.js + Express + Socket.io
-- **Datenbank:** PostgreSQL (Prisma ORM)
-- **Deployment:** Containerized (Docker)
+### Code-Richtlinien
+
+- **TypeScript** verwenden (kein JavaScript)
+- **Saubere, kommentierte Module** — jeder Bereich hat seine eigene Datei
+- Neue Mechaniken in `packages/server/src/domain/` oder `application/`
+- UI-Komponenten in `packages/client/src/components/`
+
+---
+
+## Lizenz
+
+MIT License — siehe [LICENSE](LICENSE)
+
+---
+
+*Built with ❤️ by Marcel Swoboda*
